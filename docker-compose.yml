@@ -1,0 +1,47 @@
+services:
+  # PostgreSQL Database Service
+  db:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: chartdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  # Django Backend Service
+  backend:
+    build: ./backend/chart_backend  # Path to the Dockerfile in the chart_backend directory
+    container_name: django-backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend/chart_backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=chartdb
+      - DEBUG=1
+
+  # Next.js Frontend Service
+  frontend:
+    build: ./frontend  # Path to the Dockerfile in the frontend directory
+    container_name: nextjs-frontend
+    command: npm run dev
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true  # Necessary for hot reloading in Docker
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
