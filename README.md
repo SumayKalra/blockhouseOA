@@ -1,7 +1,3 @@
-Sure! Below is a detailed **README.md** file that you can use for your project. This includes instructions for setting up and running the project with Docker, running tests, and additional context on the technologies used.
-
----
-
 # **Next.js Dashboard with Django API Backend**
 
 This project features a simple dashboard built using **Next.js** on the frontend and a **Django** backend that serves data to populate various charts (Candlestick, Line Chart, Bar Chart, and Pie Chart). The data for these charts is retrieved from hardcoded API endpoints defined in the Django API.
